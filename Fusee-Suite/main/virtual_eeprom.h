@@ -23,22 +23,21 @@
 
 uint32_t settingsarray[16];
 uint32_t blankarray[16];
-uint8_t pagedata = 0;
 uint8_t EEPROM_INITIAL_WRITE;
-uint8_t EEPROM_COLOUR;
-uint8_t SPARE1;
-uint8_t SPARE2;
-uint8_t EEPROM_USB_STRAP;
-uint8_t EEPROM_VOL_CONTROL_STRAP;
-uint8_t EEPROM_JOYCON_CONTROL_STRAP;
-uint8_t EEPROM_DOTSTAR_BRIGHTNESS;
-uint8_t SPARE3;
-uint8_t SPARE4;
-uint8_t EEPROM_SETTINGS_CHANGE;
 uint8_t EEPROM_DUAL_BOOT_TOGGLE;
+uint8_t EEPROM_JOYCON_CONTROL_STRAP_PA;
+uint8_t EEPROM_VOL_CONTROL_STRAP_PA;
+uint8_t EEPROM_USB_STRAP_PA;
+uint8_t EEPROM_JOYCON_CONTROL_STRAP;
+uint8_t EEPROM_VOL_CONTROL_STRAP;
+uint8_t EEPROM_USB_STRAP;
+uint8_t EEPROM_COLOUR;
+uint8_t EEPROM_DOTSTAR_BRIGHTNESS;
+uint8_t EEPROM_SETTINGS_CHANGE;
 uint8_t EEPROM_BOOT_OPTIONS_AVAILABLE;
 uint8_t EEPROM_SETTINGS_LOCKOUT;
-uint8_t SPARE7;
+uint8_t SPARE1;
+uint8_t SPARE2;
 
 uint8_t TEMP_EEPROM_SETTINGS_CHANGE;
 typedef struct __attribute__((__packed__)) usersettings {
@@ -102,26 +101,25 @@ void flash_write_words(uint32_t * dst, uint32_t * src, uint32_t n_words) {
 }
 
 extern uint8_t STG_TIMEOUT;
-
 void readSettings() {
   for (int y = PAGE_15; y >= (PAGE_00); y -= PAGE_SIZE) {
     usersettings_t * config = (usersettings_t * ) y;
     if (config -> a1 == 0) {
       EEPROM_INITIAL_WRITE = config -> b1;
-      EEPROM_COLOUR = config -> c1;
-      SPARE1 = config -> d1;
-      SPARE2 = config -> e1;
-      EEPROM_USB_STRAP = config -> f1;
-      EEPROM_VOL_CONTROL_STRAP = config -> g1;
-      EEPROM_JOYCON_CONTROL_STRAP = config -> h1;
-      EEPROM_DOTSTAR_BRIGHTNESS = config -> i1;
-      SPARE3 = config -> j1;
-      SPARE4 = config -> k1;
+      EEPROM_DUAL_BOOT_TOGGLE = config -> c1;
+      EEPROM_JOYCON_CONTROL_STRAP_PA = config -> d1;
+      EEPROM_VOL_CONTROL_STRAP_PA = config -> e1;
+      EEPROM_USB_STRAP_PA = config -> f1;
+      EEPROM_JOYCON_CONTROL_STRAP = config -> g1;
+      EEPROM_VOL_CONTROL_STRAP = config -> h1;
+      EEPROM_USB_STRAP = config -> i1;
+      EEPROM_COLOUR = config -> j1;
+      EEPROM_DOTSTAR_BRIGHTNESS = config -> k1; 
       EEPROM_SETTINGS_CHANGE = config -> l1;
-      EEPROM_DUAL_BOOT_TOGGLE = config -> m1;
-      EEPROM_BOOT_OPTIONS_AVAILABLE = config -> n1;
-      EEPROM_SETTINGS_LOCKOUT = config -> o1;
-      SPARE7 = config -> p1;
+      EEPROM_BOOT_OPTIONS_AVAILABLE = config -> m1;
+      EEPROM_SETTINGS_LOCKOUT = config -> n1;
+      SPARE1 = config -> o1;
+      SPARE2 = config -> p1;
       break;
     }
   }
@@ -160,20 +158,20 @@ void writeSettings(const bool overwrite) {
 
   config.a1 = 0;
   config.b1 = EEPROM_INITIAL_WRITE;
-  config.c1 = EEPROM_COLOUR;
-  config.d1 = SPARE1;
-  config.e1 = SPARE2;
-  config.f1 = EEPROM_USB_STRAP;
-  config.g1 = EEPROM_VOL_CONTROL_STRAP;
-  config.h1 = EEPROM_JOYCON_CONTROL_STRAP;
-  config.i1 = EEPROM_DOTSTAR_BRIGHTNESS;
-  config.j1 = SPARE3;
-  config.k1 = SPARE4;
+  config.c1 = EEPROM_DUAL_BOOT_TOGGLE;
+  config.d1 = EEPROM_JOYCON_CONTROL_STRAP_PA;
+  config.e1 = EEPROM_VOL_CONTROL_STRAP_PA;
+  config.f1 = EEPROM_USB_STRAP_PA;
+  config.g1 = EEPROM_JOYCON_CONTROL_STRAP;
+  config.h1 = EEPROM_VOL_CONTROL_STRAP;
+  config.i1 = EEPROM_USB_STRAP;
+  config.j1 = EEPROM_COLOUR;
+  config.k1 = EEPROM_DOTSTAR_BRIGHTNESS;
   config.l1 = EEPROM_SETTINGS_CHANGE;
-  config.m1 = EEPROM_DUAL_BOOT_TOGGLE;
-  config.n1 = EEPROM_BOOT_OPTIONS_AVAILABLE;
-  config.o1 = EEPROM_SETTINGS_LOCKOUT;
-  config.p1 = SPARE7;
+  config.m1 = EEPROM_BOOT_OPTIONS_AVAILABLE;
+  config.n1 = EEPROM_SETTINGS_LOCKOUT;
+  config.o1 = SPARE1;
+  config.p1 = SPARE2;
 
   memcpy(settingsarray, & config, 16);
 

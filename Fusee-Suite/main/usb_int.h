@@ -307,26 +307,37 @@ send_fusee() {
   usbBufferedWrite(LPRESS_MENU, 25);
 
   usbBufferedWrite(FS3, 456);
-
+#ifdef JOYCON_STRAP_PIN
   if (EEPROM_JOYCON_CONTROL_STRAP == 1)
     usbBufferedWrite(STRAP_SEARCH_INFO_TRUE, 36);
   else
     usbBufferedWrite(STRAP_SEARCH_INFO_FALSE, 36);
-
+#else 
+    usbBufferedWrite(STRAP_SEARCH_INFO_GENERIC, 36);
+#endif
   usbBufferedWrite(FS4, 7);
 
+#ifdef VOLUP_STRAP_PIN
   if (EEPROM_VOL_CONTROL_STRAP == 1)
     usbBufferedWrite(STRAP_SEARCH_INFO_TRUE, 36);
   else
     usbBufferedWrite(STRAP_SEARCH_INFO_FALSE, 36);
-
+#else 
+    usbBufferedWrite(STRAP_SEARCH_INFO_GENERIC, 36);
+#endif
   usbBufferedWrite(FS4, 7);
 
+#ifdef USB_STRAP_PIN
   if (EEPROM_USB_STRAP == 2) usbBufferedWrite(CHARGER_FAULT, 36);
   else if (EEPROM_USB_STRAP == 1)
     usbBufferedWrite(STRAP_SEARCH_INFO_TRUE, 36);
   else
     usbBufferedWrite(STRAP_SEARCH_INFO_FALSE, 36);
+#else 
+    usbBufferedWrite(STRAP_SEARCH_INFO_GENERIC, 36);
+#endif
+  
+
   usbBufferedWrite(FS5, 2845);
 
   if (EEPROM_DUAL_BOOT_TOGGLE == 1)
