@@ -808,7 +808,9 @@ sleep (const int errorCode)
 
 void first_run()
 {
+  EEPROM_PAGE_IN_USE_ID = STORAGE_ARRAY;
   readSettings ();
+  
   if (EEPROM_INITIAL_WRITE == 1) return;
   else
   {

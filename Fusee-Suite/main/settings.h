@@ -20,9 +20,9 @@
 #define VOLUP_SETTINGS_DISABLED 0
 
 //Uncomment chosen chip and CHANGE CHIP in Tools menu under "Board"
-//#define TRINKET
+#define TRINKET
 //#define QTPY
-#define XIAO
+//#define XIAO
 //#define REBUG
 //#define RCMX86_INTERNAL
 //#define GEMMA
@@ -40,8 +40,8 @@
 #define DEFAULT_JOYCON 0
 #define DEFAULT_VOLUME 0
 #define DEFAULT_COLOUR 1
-#define DEFAULT_SETTINGS_CHANGE 1 //0 = Long-press / 1 = Multiple-press
-
+#define DEFAULT_SETTINGS_CHANGE 0 //0 = Long-press / 1 = Multiple-press
+#define STORAGE_ARRAY 1 // 0 = Old EEPROM array list / 1 = New EEPROM array list
 
 //Time in mS to select an option with rapid-press in Chip Assistant
 #define SELECTION_RELEASE_TIME 200
@@ -68,7 +68,7 @@
 //Adafruit / Arduino Pin 2 is PA09 (will be VOLUP)
 //Adafruit / Arduino Pin 4 is PA06 (will be USB)
 
-//So if we do this (all uncommented obviously)
+//EXAMPLE: So if we do this (all uncommented obviously)
 //////////
 //////////  #ifdef TRINKET
 //////////  #include <Usb.h>
@@ -98,12 +98,12 @@
 #ifdef TRINKET
 #include <Usb.h>
 #define DOTSTAR_ENABLED 1
-//#define JOYCON_STRAP_PIN_PA 7 //PA07
-//#define VOLUP_STRAP_PIN_PA 8 //PA08
-//#define USB_LOW_RESET_PA 9 //PA09
-#define JOYCON_STRAP_PIN 3
-#define VOLUP_STRAP_PIN 0
-#define USB_LOW_RESET 2
+#define JOYCON_STRAP_PIN_PA 7 //PA07
+#define VOLUP_STRAP_PIN_PA 8 //PA08
+#define USB_LOW_RESET_PA 9 //PA09
+#define JOYCON_STRAP_PIN 3 //Is PA07
+#define VOLUP_STRAP_PIN 0 //Is PA08
+#define USB_LOW_RESET 2 //Is PA09
 #define ONBOARD_LED 13
 #endif
 

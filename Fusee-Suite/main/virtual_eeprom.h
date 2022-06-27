@@ -23,6 +23,7 @@
 
 uint32_t settingsarray[16];
 uint32_t blankarray[16];
+uint8_t EEPROM_PAGE_IN_USE_ID;
 uint8_t EEPROM_INITIAL_WRITE;
 uint8_t EEPROM_DUAL_BOOT_TOGGLE;
 uint8_t EEPROM_JOYCON_CONTROL_STRAP_PA;
@@ -104,7 +105,7 @@ extern uint8_t STG_TIMEOUT;
 void readSettings() {
   for (int y = PAGE_15; y >= (PAGE_00); y -= PAGE_SIZE) {
     usersettings_t * config = (usersettings_t * ) y;
-    if (config -> a1 == 0) {
+    if (config -> a1 == 1) {
       EEPROM_INITIAL_WRITE = config -> b1;
       EEPROM_DUAL_BOOT_TOGGLE = config -> c1;
       EEPROM_JOYCON_CONTROL_STRAP_PA = config -> d1;
@@ -119,6 +120,24 @@ void readSettings() {
       EEPROM_BOOT_OPTIONS_AVAILABLE = config -> m1;
       EEPROM_SETTINGS_LOCKOUT = config -> n1;
       SPARE1 = config -> o1;
+      SPARE2 = config -> p1;
+      break;
+    }
+    else if (config -> a1 == 0) {
+      EEPROM_INITIAL_WRITE = config -> b1;
+      EEPROM_COLOUR = config -> c1;
+      EEPROM_JOYCON_CONTROL_STRAP_PA = config -> d1;
+      EEPROM_VOL_CONTROL_STRAP_PA = config -> e1;
+      EEPROM_USB_STRAP = config -> f1;
+      EEPROM_VOL_CONTROL_STRAP = config -> g1;
+      EEPROM_JOYCON_CONTROL_STRAP = config -> h1;
+      EEPROM_DOTSTAR_BRIGHTNESS = config -> i1;
+      EEPROM_USB_STRAP_PA = config -> j1;
+      SPARE1 = config -> k1;
+      EEPROM_SETTINGS_CHANGE = config -> l1;
+      EEPROM_DUAL_BOOT_TOGGLE = config -> m1;
+      EEPROM_BOOT_OPTIONS_AVAILABLE = config -> n1;
+      EEPROM_SETTINGS_LOCKOUT = config -> o1;
       SPARE2 = config -> p1;
       break;
     }
@@ -156,26 +175,48 @@ void writeSettings(const bool overwrite) {
 
   usersettings_t config;
 
-  config.a1 = 0;
-  config.b1 = EEPROM_INITIAL_WRITE;
-  config.c1 = EEPROM_DUAL_BOOT_TOGGLE;
-  config.d1 = EEPROM_JOYCON_CONTROL_STRAP_PA;
-  config.e1 = EEPROM_VOL_CONTROL_STRAP_PA;
-  config.f1 = EEPROM_USB_STRAP_PA;
-  config.g1 = EEPROM_JOYCON_CONTROL_STRAP;
-  config.h1 = EEPROM_VOL_CONTROL_STRAP;
-  config.i1 = EEPROM_USB_STRAP;
-  config.j1 = EEPROM_COLOUR;
-  config.k1 = EEPROM_DOTSTAR_BRIGHTNESS;
-  config.l1 = EEPROM_SETTINGS_CHANGE;
-  config.m1 = EEPROM_BOOT_OPTIONS_AVAILABLE;
-  config.n1 = EEPROM_SETTINGS_LOCKOUT;
-  config.o1 = SPARE1;
-  config.p1 = SPARE2;
+  if(EEPROM_PAGE_IN_USE_ID == 1)
+  {
+    config.a1 = EEPROM_PAGE_IN_USE_ID;
+    config.b1 = EEPROM_INITIAL_WRITE;
+    config.c1 = EEPROM_DUAL_BOOT_TOGGLE;
+    config.d1 = EEPROM_JOYCON_CONTROL_STRAP_PA;
+    config.e1 = EEPROM_VOL_CONTROL_STRAP_PA;
+    config.f1 = EEPROM_USB_STRAP_PA;
+    config.g1 = EEPROM_JOYCON_CONTROL_STRAP;
+    config.h1 = EEPROM_VOL_CONTROL_STRAP;
+    config.i1 = EEPROM_USB_STRAP;
+    config.j1 = EEPROM_COLOUR;
+    config.k1 = EEPROM_DOTSTAR_BRIGHTNESS;
+    config.l1 = EEPROM_SETTINGS_CHANGE;
+    config.m1 = EEPROM_BOOT_OPTIONS_AVAILABLE;
+    config.n1 = EEPROM_SETTINGS_LOCKOUT;
+    config.o1 = SPARE1;
+    config.p1 = SPARE1;
+  }
+  else if(EEPROM_PAGE_IN_USE_ID == 0)
+  {
+    config.a1 = 0;
+    config.b1 = EEPROM_INITIAL_WRITE;
+    config.c1 = EEPROM_COLOUR;
+    config.d1 = EEPROM_JOYCON_CONTROL_STRAP_PA;
+    config.e1 = EEPROM_VOL_CONTROL_STRAP_PA;
+    config.f1 = EEPROM_USB_STRAP;
+    config.g1 = EEPROM_VOL_CONTROL_STRAP;
+    config.h1 = EEPROM_JOYCON_CONTROL_STRAP;
+    config.i1 = EEPROM_DOTSTAR_BRIGHTNESS;
+    config.j1 = EEPROM_USB_STRAP_PA;
+    config.k1 = SPARE1;
+    config.l1 = EEPROM_SETTINGS_CHANGE;
+    config.m1 = EEPROM_DUAL_BOOT_TOGGLE;
+    config.n1 = EEPROM_BOOT_OPTIONS_AVAILABLE;
+    config.o1 = EEPROM_SETTINGS_LOCKOUT;
+    config.p1 = SPARE2;
+  }
 
   memcpy(settingsarray, & config, 16);
 
-  if (LAST_PAGE -> a1 == 0) {
+  if ((LAST_PAGE -> a1 == 0) || (LAST_PAGE -> a1 == 1)) {
     flash_erase_row((uint32_t * ) PAGE_00);
     flash_erase_row((uint32_t * ) PAGE_04);
     flash_erase_row((uint32_t * ) PAGE_08);
