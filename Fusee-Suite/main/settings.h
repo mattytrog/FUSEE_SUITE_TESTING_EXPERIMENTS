@@ -20,8 +20,8 @@
 #define VOLUP_SETTINGS_DISABLED 0
 
 //Uncomment chosen chip and CHANGE CHIP in Tools menu under "Board"
-#define TRINKET
-//#define QTPY
+//#define TRINKET
+#define QTPY
 //#define XIAO
 //#define REBUG
 //#define RCMX86_INTERNAL
@@ -41,7 +41,7 @@
 #define DEFAULT_VOLUME 0
 #define DEFAULT_COLOUR 1
 #define DEFAULT_SETTINGS_CHANGE 0 //0 = Long-press / 1 = Multiple-press
-#define STORAGE_ARRAY 1 // 0 = Old EEPROM array list / 1 = New EEPROM array list
+#define STORAGE_ARRAY 0 // 0 = Old EEPROM array list / 1 = New EEPROM array list. 1 = much neater. No functional difference, though SETTINGS.UF2 would need to be redone. Setting bytes occupy "different" slots in the eeprom.
 
 //Time in mS to select an option with rapid-press in Chip Assistant
 #define SELECTION_RELEASE_TIME 200
